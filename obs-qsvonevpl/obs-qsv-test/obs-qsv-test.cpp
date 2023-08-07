@@ -1,6 +1,6 @@
 #define MFX_DEPRECATED_OFF
 #include "mfx.h"
-#include "../helpers/common_utils.h"
+#include "../helpers/common_utils.hpp"
 #include <intrin.h>
 #include <util/windows/ComPtr.hpp>
 

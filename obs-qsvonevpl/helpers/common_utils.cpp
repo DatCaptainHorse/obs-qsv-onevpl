@@ -1,11 +1,14 @@
-#include "common_utils.h"
-#include "../obs-qsv-onevpl-encoder.h"
+#include "common_utils.hpp"
+#include "../obs-qsv-onevpl-encoder.hpp"
 #include <string>
-#include <stdint.h>
+#include <cstdint>
 
 // =================================================================
 // Utility functions, not directly tied to Intel Media SDK functionality
 //
+
+struct adapter_info adapters[MAX_ADAPTERS] = {};
+size_t adapter_count = 0;
 
 void PrintErrString(int err, const char *filestr, int line)
 {

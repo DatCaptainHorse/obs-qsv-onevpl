@@ -16,18 +16,18 @@ This sample was distributed or derived from the Intel's Media Samples package.
 The original version of this sample may be obtained from https://software.intel.com/en-us/intel-media-server-studio
 or https://software.intel.com/en-us/media-client-solutions-support.
 \**********************************************************************************/
-#include "mfx.h"
+#include <vpl/mfx.h>
 #include <algorithm>
 #include <vector>
 #include <memory>
 #include <utility>
 
-#include "common_utils.h"
+#include "common_utils.hpp"
 //#ifndef MFX_VERSION
 //#error MFX_VERSION not defined
 //#endif
 
-#include "mfxbrc.h"
+#include <vpl/mfxbrc.h>
 
 #ifndef __PIPELINE_ENCODE_BRC_H__
 #define __PIPELINE_ENCODE_BRC_H__
@@ -201,7 +201,7 @@ public:
 		   mfxU32 avgBitPerFrame)
 		: m_maxWinBits(maxBitPerFrame * windowSize),
 		  m_maxWinBitsLim(0),
-		  m_avgBitPerFrame(min(avgBitPerFrame, maxBitPerFrame)),
+		  m_avgBitPerFrame(std::min(avgBitPerFrame, maxBitPerFrame)),
 		  m_currPosInWindow(windowSize - 1),
 		  m_lastFrameOrder(mfxU32(-1))
 
@@ -262,12 +262,12 @@ public:
 			maxWinBitsLim = (m_maxWinBits + m_maxWinBitsLim) / 2;
 		if (bPanic)
 			maxWinBitsLim = m_maxWinBits;
-		maxWinBitsLim = min(maxWinBitsLim + recode * GetStep() / 2,
+		maxWinBitsLim = std::min(maxWinBitsLim + recode * GetStep() / 2,
 					 m_maxWinBits);
 
 		mfxU32 maxFrameSize =
 			winBits >= m_maxWinBitsLim
-				? mfxU32(max(
+				? mfxU32(std::max(
 					  mfxI32(m_maxWinBits - winBits), 1))
 				: maxWinBitsLim - winBits;
 

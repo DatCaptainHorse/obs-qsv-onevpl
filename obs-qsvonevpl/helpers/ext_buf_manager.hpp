@@ -12,7 +12,7 @@
 #include <utility>
 
 #ifndef __MFX_H__
-#include "mfx.h"
+#include <vpl/mfx.h>
 #endif
 constexpr uint16_t max_num_ext_buffers = 63 * 2;
 
@@ -170,6 +170,7 @@ template<> struct mfx_ext_buffer_id<mfxExtMasteringDisplayColourVolume> {
 template<> struct mfx_ext_buffer_id<mfxExtContentLightLevelInfo> {
 	enum { id = MFX_EXTBUFF_CONTENT_LIGHT_LEVEL_INFO };
 };
+/* TODO: These seem to be removed ?
 template<> struct mfx_ext_buffer_id<mfxExtCodingOptionDDI> {
 	enum { id = MFX_EXTBUFF_DDI };
 };
@@ -178,7 +179,7 @@ template<> struct mfx_ext_buffer_id<mfxExtEncToolsConfig> {
 };
 template<> struct mfx_ext_buffer_id<mfxExtAV1AuxData> {
 	enum { id = MFX_EXTBUFF_AV1_AUXDATA };
-};
+};*/
 template<> struct mfx_ext_buffer_id<mfxExtChromaLocInfo> {
 	enum { id = MFX_EXTBUFF_CHROMA_LOC_INFO };
 };
@@ -424,7 +425,7 @@ private:
 			MFX_EXTBUFF_CODING_OPTION,
 			MFX_EXTBUFF_CODING_OPTION2,
 			MFX_EXTBUFF_CODING_OPTION3,
-			MFX_EXTBUFF_DDI,
+			//MFX_EXTBUFF_DDI, // Removed in new version?
 			MFX_EXTBUFF_BRC,
 			MFX_EXTBUFF_AV1_BITSTREAM_PARAM,
 			MFX_EXTBUFF_HEVC_PARAM,

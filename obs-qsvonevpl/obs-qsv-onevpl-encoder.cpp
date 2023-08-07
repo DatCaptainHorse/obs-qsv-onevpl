@@ -57,11 +57,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // QSV_Encoder.cpp : Defines the exported functions for the DLL application.
 //
 //#define MFX_DEPRECATED_OFF
-#define ONEVPL_EXPERIMENTAL
 
-#include "obs-qsv-onevpl-encoder.h"
-#include "obs-qsv-onevpl-encoder-internal.h"
-#include "helpers/common_utils.h"
+#include "obs-qsv-onevpl-encoder.hpp"
+#include "obs-qsv-onevpl-encoder-internal.hpp"
 #include <obs-module.h>
 
 #include <string>

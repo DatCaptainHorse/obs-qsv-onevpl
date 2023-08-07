@@ -54,8 +54,8 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <stdio.h>
-#include <inttypes.h>
+#include <cstdio>
+#include <cinttypes>
 #include <util/dstr.h>
 #include <util/darray.h>
 #include <util/platform.h>
@@ -64,7 +64,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <obs-hevc.h>
 #include <obs-avc.h>
 #include <util/threading.h>
-#include "obs-qsv-onevpl-encoder.h"
+#include "obs-qsv-onevpl-encoder.hpp"
 
 #ifndef _STDINT_H_INCLUDED
 #define _STDINT_H_INCLUDED
@@ -361,7 +361,7 @@ static bool rate_control_modified(obs_properties_t *ppts, obs_property_t *p,
 	if (bVisible) {
 
 		bVisible = astrcmpi(lookahead, "ON") == 0 &&
-			   (strcmpi(rate_control, "CBR") == 0 ||
+			   (astrcmpi(rate_control, "CBR") == 0 ||
 			    astrcmpi(rate_control, "VBR") == 0);
 		p = obs_properties_get(ppts, "lookahead_latency");
 		obs_property_set_visible(p, bVisible);

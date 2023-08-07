@@ -1,7 +1,7 @@
 #pragma once
 #include <stdio.h>
 
-#include "mfxvideo++.h"
+#include <vpl/mfxvideo++.h>
 
 
 // =================================================================
@@ -91,3 +91,17 @@ void mfxGetTime(mfxTime *timestamp);
 //void mfxInitTime();  might need this for Windows
 double TimeDiffMsec(mfxTime tfinish, mfxTime tstart);
 extern "C" void util_cpuid(int cpuinfo[4], int flags);
+
+void check_adapters(struct adapter_info *adapters, size_t *adapter_count);
+
+struct adapter_info {
+	bool is_intel;
+	bool is_dgpu;
+	bool supports_av1;
+	bool supports_hevc;
+	bool supports_vp9;
+};
+
+#define MAX_ADAPTERS 10
+extern struct adapter_info adapters[MAX_ADAPTERS];
+extern size_t adapter_count;

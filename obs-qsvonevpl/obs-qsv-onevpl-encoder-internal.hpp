@@ -1,6 +1,6 @@
-#include "obs-qsv-onevpl-encoder.h"
-#include "helpers/common_utils.h"
-#include "helpers/ext_buf_manager.h"
+#include "obs-qsv-onevpl-encoder.hpp"
+#include "helpers/common_utils.hpp"
+#include "helpers/ext_buf_manager.hpp"
 #ifndef __MFX_H__
 #include "mfx.h"
 #endif
@@ -163,7 +163,7 @@ protected:
 
 private:
 	mfxIMPL mfx_Impl;
-	mfxPlatform mfx_Platform;
+	//mfxPlatform mfx_Platform; // LEGACY
 	mfxVersion mfx_Version;
 	mfxLoader mfx_Loader;
 	mfxConfig mfx_LoaderConfig;
@@ -185,6 +185,7 @@ private:
 	bool b_isDGPU;
 	mfx_VideoParam m_mfxEncParams;
 	mfxEncodeCtrl m_mfxEncCtrlParams;
+	mfxExtTuneEncodeQuality mfx_Ext_TuneQuality;
 	mfx_EncodeCtrl encCTRL;
 	std::vector<mfxExtBuffer *> mfx_CtrlBuffers;
 };

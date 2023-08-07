@@ -55,10 +55,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+#if defined(_WIN32) || defined(_WIN64)
+#define NOMINMAX
 #include <Windows.h>
-#include "mfxstructures.h"
-#include "mfxadapter.h"
-#include <stdint.h>
+#endif
+#include <vpl/mfxstructures.h>
+#include <vpl/mfxadapter.h>
+#include <cstdint>
+#include <cstddef>
+
+#include "helpers/common_utils.hpp"
 
 //#ifdef __cplusplus
 //extern "C" {
@@ -122,19 +128,7 @@ static const char *const qsv_params_condition_denoise_mode[] = {
 struct qsv_t {
 };
 
-struct adapter_info {
-	bool is_intel;
-	bool is_dgpu;
-	bool supports_av1;
-	bool supports_hevc;
-	bool supports_vp9;
-};
-
 enum qsv_codec { QSV_CODEC_AVC, QSV_CODEC_AV1, QSV_CODEC_HEVC, QSV_CODEC_VP9 };
-
-#define MAX_ADAPTERS 10
-extern struct adapter_info adapters[MAX_ADAPTERS];
-extern size_t adapter_count;
 
 struct qsv_param_t {
 	mfxU16 nTargetUsage; /* 1 through 7, 1 being best quality and 7
