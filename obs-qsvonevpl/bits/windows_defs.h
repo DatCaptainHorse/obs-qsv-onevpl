@@ -1,4 +1,4 @@
-#define NOMINMAX \
+#define NOMINMAX
 #include <windows.h>
 
 #define MSDK_FOPEN(FH, FN, M)           { fopen_s(&FH, FN, M); }

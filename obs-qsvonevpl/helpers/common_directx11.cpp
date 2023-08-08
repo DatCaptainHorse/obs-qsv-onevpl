@@ -26,9 +26,9 @@ const struct {
 	mfxIMPL impl;     // actual implementation
 	mfxU32 adapterID; // device adapter number
 } implTypes[] = {{MFX_IMPL_HARDWARE, 0},
-		 {MFX_IMPL_HARDWARE2, 1},
-		 {MFX_IMPL_HARDWARE3, 2},
-		 {MFX_IMPL_HARDWARE4, 3}};
+				 {MFX_IMPL_HARDWARE2, 1},
+				 {MFX_IMPL_HARDWARE3, 2},
+				 {MFX_IMPL_HARDWARE4, 3}};
 
 // =================================================================
 // DirectX functionality required to manage DX11 device and surfaces
@@ -39,7 +39,7 @@ mfxStatus FillSCD1(DXGI_SWAP_CHAIN_DESC1 &scd1)
 	scd1.Width = 0; // Use automatic sizing.
 	scd1.Height = 0;
 	scd1.Format = (g_bIsA2rgb10) ? DXGI_FORMAT_R10G10B10A2_UNORM
-				     : DXGI_FORMAT_B8G8R8A8_UNORM;
+								 : DXGI_FORMAT_B8G8R8A8_UNORM;
 	scd1.Stereo = /*n_Views == 2 ? TRUE : */ FALSE;
 	scd1.SampleDesc.Count = 1; // Don't use multi-sampling.
 	scd1.SampleDesc.Quality = 0;
@@ -60,7 +60,7 @@ IDXGIAdapter *GetIntelDeviceAdapterHandle(mfxSession session)
 	MFXQueryIMPL(session, &impl);
 
 	mfxIMPL baseImpl = MFX_IMPL_BASETYPE(
-		impl); // Extract Media SDK base implementation type
+			impl); // Extract Media SDK base implementation type
 
 	// get corresponding adapter number
 	for (mfxU8 i = 0; i < sizeof(implTypes) / sizeof(implTypes[0]); i++) {
@@ -71,7 +71,7 @@ IDXGIAdapter *GetIntelDeviceAdapterHandle(mfxSession session)
 	}
 
 	HRESULT hres = CreateDXGIFactory1(__uuidof(IDXGIFactory2),
-					  (void **)(&g_pDXGIFactory));
+									  (void **)(&g_pDXGIFactory));
 	if (FAILED(hres))
 		return NULL;
 
@@ -89,9 +89,9 @@ mfxStatus CreateHWDevice(mfxSession session, mfxHDL *deviceHandle, HWND hWindow)
 	HRESULT hres = S_OK;
 
 	static D3D_FEATURE_LEVEL FeatureLevels[] = {D3D_FEATURE_LEVEL_11_1,
-						    D3D_FEATURE_LEVEL_11_0,
-						    D3D_FEATURE_LEVEL_10_1,
-						    D3D_FEATURE_LEVEL_10_0};
+												D3D_FEATURE_LEVEL_11_0,
+												D3D_FEATURE_LEVEL_10_1,
+												D3D_FEATURE_LEVEL_10_0};
 	D3D_FEATURE_LEVEL pFeatureLevelsOut;
 
 	g_pAdapter = GetIntelDeviceAdapterHandle(session);
@@ -100,15 +100,15 @@ mfxStatus CreateHWDevice(mfxSession session, mfxHDL *deviceHandle, HWND hWindow)
 	}
 
 	UINT dxFlags = D3D11_CREATE_DEVICE_VIDEO_SUPPORT |
-		       D3D11_CREATE_DEVICE_BGRA_SUPPORT |
-		       D3D11_CREATE_DEVICE_DISABLE_GPU_TIMEOUT;
+				   D3D11_CREATE_DEVICE_BGRA_SUPPORT |
+				   D3D11_CREATE_DEVICE_DISABLE_GPU_TIMEOUT;
 	//UINT dxFlags = D3D11_CREATE_DEVICE_DEBUG;
 
 	hres = D3D11CreateDevice(g_pAdapter, D3D_DRIVER_TYPE_UNKNOWN, NULL,
-				 dxFlags, FeatureLevels,
-				 _countof(FeatureLevels), D3D11_SDK_VERSION,
-				 &g_pD3D11Device, &pFeatureLevelsOut,
-				 &g_pD3D11Ctx);
+							 dxFlags, FeatureLevels,
+							 _countof(FeatureLevels), D3D11_SDK_VERSION,
+							 &g_pD3D11Device, &pFeatureLevelsOut,
+							 &g_pD3D11Ctx);
 	if (FAILED(hres)) {
 		return MFX_ERR_DEVICE_FAILED;
 	}
@@ -135,9 +135,9 @@ mfxStatus CreateHWDevice(mfxSession session, mfxHDL *deviceHandle, HWND hWindow)
 		FillSCD1(swapChainDesc);
 
 		hres = g_pDXGIFactory->CreateSwapChainForHwnd(
-			g_pD3D11Device, reinterpret_cast<HWND>(hWindow),
-			&swapChainDesc, NULL, NULL,
-			reinterpret_cast<IDXGISwapChain1 **>(&g_pSwapChain));
+				g_pD3D11Device, reinterpret_cast<HWND>(hWindow),
+				&swapChainDesc, NULL, NULL,
+				reinterpret_cast<IDXGISwapChain1 **>(&g_pSwapChain));
 		if (FAILED(hres))
 			return MFX_ERR_DEVICE_FAILED;
 	}
@@ -157,9 +157,9 @@ mfxStatus Reset(mfxHDL *deviceHandle)
 
 	HRESULT hres = S_OK;
 	hres = g_pDXGIFactory->CreateSwapChainForHwnd(
-		g_pD3D11Device, reinterpret_cast<HWND>(deviceHandle),
-		&swapChainDesc, NULL, NULL,
-		reinterpret_cast<IDXGISwapChain1 **>(&g_pSwapChain));
+			g_pD3D11Device, reinterpret_cast<HWND>(deviceHandle),
+			&swapChainDesc, NULL, NULL,
+			reinterpret_cast<IDXGISwapChain1 **>(&g_pSwapChain));
 
 	if (FAILED(hres)) {
 		return MFX_ERR_DEVICE_FAILED;
@@ -191,12 +191,12 @@ mfxStatus CreateVideoProcessor(mfxFrameSurface1 *pSurface)
 	CComQIPtr<ID3D11VideoDevice> m_pDX11VideoDevice;
 	CComPtr<ID3D11VideoProcessor> m_pVideoProcessor;
 	if (FAILED(hr = m_pDX11VideoDevice->CreateVideoProcessorEnumerator(
-			   &ContentDesc, &m_VideoProcessorEnum))) {
+			&ContentDesc, &m_VideoProcessorEnum))) {
 
 		return MFX_ERR_DEVICE_FAILED;
 	} else if (FAILED(hr = m_pDX11VideoDevice->CreateVideoProcessor(
-				  m_VideoProcessorEnum, 0,
-				  &m_pVideoProcessor))) {
+			m_VideoProcessorEnum, 0,
+			&m_pVideoProcessor))) {
 		return MFX_ERR_DEVICE_FAILED;
 	}
 
@@ -262,61 +262,61 @@ void ClearRGBSurfaceD3D(mfxMemId memId)
 // Intel Media SDK memory allocator entrypoints....
 //
 mfxStatus _simple_alloc(mfxFrameAllocRequest *request,
-			mfxFrameAllocResponse *response)
+						mfxFrameAllocResponse *response)
 {
 	HRESULT hRes;
 
 	// Determine surface format
 	DXGI_FORMAT format;
 	switch (request->Info.FourCC) {
-	case MFX_FOURCC_NV12:
-		format = DXGI_FORMAT_NV12;
-		break;
-	case MFX_FOURCC_RGB4:
-		format = DXGI_FORMAT_B8G8R8A8_UNORM;
-		break;
-	case MFX_FOURCC_BGR4:
-		format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		break;
-	case MFX_FOURCC_YUY2:
-		format = DXGI_FORMAT_YUY2;
-		break;
-	case MFX_FOURCC_P8:
-	case MFX_FOURCC_P8_TEXTURE:
-		format = DXGI_FORMAT_P8;
-		break;
-	case MFX_FOURCC_P010:
-		format = DXGI_FORMAT_P010;
-		break;
-	case MFX_FOURCC_A2RGB10:
-		format = DXGI_FORMAT_R10G10B10A2_UNORM;
-		break;
-	case MFX_FOURCC_AYUV:
-		format = DXGI_FORMAT_AYUV;
-		break;
-	case DXGI_FORMAT_AYUV:
-		format = DXGI_FORMAT_AYUV;
-		break;
-	case MFX_FOURCC_Y210:
-		format = DXGI_FORMAT_Y210;
-		break;
-	case MFX_FOURCC_Y410:
-		format = DXGI_FORMAT_Y410;
-		break;
-	case MFX_FOURCC_P016:
-		format = DXGI_FORMAT_P016;
-		break;
-	case MFX_FOURCC_Y216:
-		format = DXGI_FORMAT_Y216;
-		break;
-	case MFX_FOURCC_Y416:
-		format = DXGI_FORMAT_Y416;
-		break;
-	default:
-	case DXGI_FORMAT_UNKNOWN:
-		/*format = DXGI_FORMAT_UNKNOWN;*/
-		return MFX_ERR_UNSUPPORTED;
-		break;
+		case MFX_FOURCC_NV12:
+			format = DXGI_FORMAT_NV12;
+			break;
+		case MFX_FOURCC_RGB4:
+			format = DXGI_FORMAT_B8G8R8A8_UNORM;
+			break;
+		case MFX_FOURCC_BGR4:
+			format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			break;
+		case MFX_FOURCC_YUY2:
+			format = DXGI_FORMAT_YUY2;
+			break;
+		case MFX_FOURCC_P8:
+		case MFX_FOURCC_P8_TEXTURE:
+			format = DXGI_FORMAT_P8;
+			break;
+		case MFX_FOURCC_P010:
+			format = DXGI_FORMAT_P010;
+			break;
+		case MFX_FOURCC_A2RGB10:
+			format = DXGI_FORMAT_R10G10B10A2_UNORM;
+			break;
+		case MFX_FOURCC_AYUV:
+			format = DXGI_FORMAT_AYUV;
+			break;
+		case DXGI_FORMAT_AYUV:
+			format = DXGI_FORMAT_AYUV;
+			break;
+		case MFX_FOURCC_Y210:
+			format = DXGI_FORMAT_Y210;
+			break;
+		case MFX_FOURCC_Y410:
+			format = DXGI_FORMAT_Y410;
+			break;
+		case MFX_FOURCC_P016:
+			format = DXGI_FORMAT_P016;
+			break;
+		case MFX_FOURCC_Y216:
+			format = DXGI_FORMAT_Y216;
+			break;
+		case MFX_FOURCC_Y416:
+			format = DXGI_FORMAT_Y416;
+			break;
+		default:
+		case DXGI_FORMAT_UNKNOWN:
+			/*format = DXGI_FORMAT_UNKNOWN;*/
+			return MFX_ERR_UNSUPPORTED;
+			break;
 	}
 
 	// Allocate custom container to keep texture and stage buffers for each surface
@@ -332,8 +332,8 @@ mfxStatus _simple_alloc(mfxFrameAllocRequest *request,
 			return MFX_ERR_MEMORY_ALLOC;
 		}
 		mids[i]->rw = static_cast<mfxU16>(
-			request->Type &
-			0xF000); // Set intended read/write operation
+				request->Type &
+				0xF000); // Set intended read/write operation
 	}
 
 	request->Type = request->Type & 0x0FFF;
@@ -374,18 +374,18 @@ mfxStatus _simple_alloc(mfxFrameAllocRequest *request,
 		desc.MiscFlags = D3D11_RESOURCE_MISC_SHARED;
 
 		if ((MFX_MEMTYPE_FROM_VPPIN & request->Type) &&
-		    ((DXGI_FORMAT_YUY2 == desc.Format) ||
-		     (DXGI_FORMAT_B8G8R8A8_UNORM == desc.Format) ||
-		     (DXGI_FORMAT_R10G10B10A2_UNORM == desc.Format) ||
-		     (DXGI_FORMAT_R16G16B16A16_UNORM == desc.Format))) {
+			((DXGI_FORMAT_YUY2 == desc.Format) ||
+			 (DXGI_FORMAT_B8G8R8A8_UNORM == desc.Format) ||
+			 (DXGI_FORMAT_R10G10B10A2_UNORM == desc.Format) ||
+			 (DXGI_FORMAT_R16G16B16A16_UNORM == desc.Format))) {
 			desc.BindFlags = D3D11_BIND_RENDER_TARGET;
 			if (desc.ArraySize > 2)
 				return MFX_ERR_MEMORY_ALLOC;
 		}
 
 		if ((MFX_MEMTYPE_FROM_VPPOUT & request->Type) ||
-		    (MFX_MEMTYPE_VIDEO_MEMORY_PROCESSOR_TARGET &
-		     request->Type)) {
+			(MFX_MEMTYPE_VIDEO_MEMORY_PROCESSOR_TARGET &
+			 request->Type)) {
 			desc.BindFlags = D3D11_BIND_RENDER_TARGET;
 			if (desc.ArraySize > 2)
 				return MFX_ERR_MEMORY_ALLOC;
@@ -398,9 +398,9 @@ mfxStatus _simple_alloc(mfxFrameAllocRequest *request,
 
 		// Create surface textures
 		for (size_t i = 0;
-		     i < request->NumFrameSuggested / desc.ArraySize; i++) {
+			 i < request->NumFrameSuggested / desc.ArraySize; i++) {
 			hRes = g_pD3D11Device->CreateTexture2D(&desc, nullptr,
-							       &pTexture2D);
+												   &pTexture2D);
 
 			if (FAILED(hRes))
 				return MFX_ERR_MEMORY_ALLOC;
@@ -411,14 +411,14 @@ mfxStatus _simple_alloc(mfxFrameAllocRequest *request,
 		desc.ArraySize = 1;
 		desc.Usage = D3D11_USAGE_STAGING;
 		desc.CPUAccessFlags =
-			D3D11_CPU_ACCESS_READ; // | D3D11_CPU_ACCESS_WRITE;
+				D3D11_CPU_ACCESS_READ; // | D3D11_CPU_ACCESS_WRITE;
 		desc.BindFlags = 0;
 		desc.MiscFlags = D3D11_RESOURCE_MISC_SHARED;
 
 		// Create surface staging textures
 		for (size_t i = 0; i < request->NumFrameSuggested; i++) {
 			hRes = g_pD3D11Device->CreateTexture2D(&desc, nullptr,
-							       &pTexture2D);
+												   &pTexture2D);
 
 			if (FAILED(hRes))
 				return MFX_ERR_MEMORY_ALLOC;
@@ -434,7 +434,7 @@ mfxStatus _simple_alloc(mfxFrameAllocRequest *request,
 }
 
 mfxStatus simple_alloc(mfxHDL pthis, mfxFrameAllocRequest *request,
-		       mfxFrameAllocResponse *response)
+					   mfxFrameAllocResponse *response)
 {
 	mfxStatus sts = MFX_ERR_NONE;
 
@@ -442,8 +442,8 @@ mfxStatus simple_alloc(mfxHDL pthis, mfxFrameAllocRequest *request,
 		return MFX_ERR_UNSUPPORTED;
 
 	if (allocDecodeResponses.find(pthis) != allocDecodeResponses.end() &&
-	    MFX_MEMTYPE_EXTERNAL_FRAME & request->Type &&
-	    MFX_MEMTYPE_FROM_DECODE & request->Type) {
+		MFX_MEMTYPE_EXTERNAL_FRAME & request->Type &&
+		MFX_MEMTYPE_FROM_DECODE & request->Type) {
 		// Memory for this request was already allocated during manual allocation stage. Return saved response
 		//   When decode acceleration device (DXVA) is created it requires a list of d3d surfaces to be passed.
 		//   Therefore Media SDK will ask for the surface info/mids again at Init() stage, thus requiring us to return the saved response
@@ -455,7 +455,7 @@ mfxStatus simple_alloc(mfxHDL pthis, mfxFrameAllocRequest *request,
 
 		if (MFX_ERR_NONE == sts) {
 			if (MFX_MEMTYPE_EXTERNAL_FRAME & request->Type &&
-			    MFX_MEMTYPE_FROM_DECODE & request->Type) {
+				MFX_MEMTYPE_FROM_DECODE & request->Type) {
 				// Decode alloc response handling
 				allocDecodeResponses[pthis] = *response;
 				allocDecodeRefCount[pthis]++;
@@ -480,16 +480,16 @@ mfxStatus simple_lock(mfxHDL pthis, mfxMemId mid, mfxFrameData *ptr)
 
 	CustomMemId *memId = static_cast<CustomMemId *>(mid);
 	ID3D11Texture2D *pSurface =
-		static_cast<ID3D11Texture2D *>(memId->memId);
+			static_cast<ID3D11Texture2D *>(memId->memId);
 	ID3D11Texture2D *pStage =
-		static_cast<ID3D11Texture2D *>(memId->memIdStage);
+			static_cast<ID3D11Texture2D *>(memId->memIdStage);
 
 	D3D11_MAP mapType = D3D11_MAP_READ;
 	UINT mapFlags = D3D11_MAP_FLAG_DO_NOT_WAIT;
 
 	if (nullptr == pStage) {
 		hRes = g_pD3D11Ctx->Map(pSurface, 0, mapType, mapFlags,
-					&lockedRect);
+								&lockedRect);
 		desc.Format = DXGI_FORMAT_P8;
 	} else {
 		pSurface->GetDesc(&desc);
@@ -497,14 +497,14 @@ mfxStatus simple_lock(mfxHDL pthis, mfxMemId mid, mfxFrameData *ptr)
 		// copy data only in case of user wants to read from stored surface
 		if (memId->rw & WILL_READ) {
 			g_pD3D11Ctx->CopySubresourceRegion(
-				pStage, 0, 0, 0, 0, pSurface, 0, nullptr);
+					pStage, 0, 0, 0, 0, pSurface, 0, nullptr);
 		}
 
 		do {
 			hRes = g_pD3D11Ctx->Map(pStage, 0, mapType, mapFlags,
-						&lockedRect);
+									&lockedRect);
 			if (S_OK != hRes &&
-			    DXGI_ERROR_WAS_STILL_DRAWING != hRes)
+				DXGI_ERROR_WAS_STILL_DRAWING != hRes)
 				return MFX_ERR_LOCK_MEMORY;
 		} while (DXGI_ERROR_WAS_STILL_DRAWING == hRes);
 	}
@@ -513,71 +513,71 @@ mfxStatus simple_lock(mfxHDL pthis, mfxMemId mid, mfxFrameData *ptr)
 		return MFX_ERR_LOCK_MEMORY;
 
 	switch (desc.Format) {
-	case DXGI_FORMAT_P016:
-	case DXGI_FORMAT_NV12:
-		ptr->Pitch = static_cast<mfxU16>(lockedRect.RowPitch);
-		ptr->Y = static_cast<mfxU8 *>(lockedRect.pData);
-		ptr->U = static_cast<mfxU8 *>(
-			static_cast<mfxU8 *>(lockedRect.pData) +
-			desc.Height * lockedRect.RowPitch);
-		ptr->V = (desc.Format == DXGI_FORMAT_P010) ? ptr->U + 2
-							   : ptr->U + 1;
-		break;
-	case DXGI_FORMAT_420_OPAQUE: // can be unsupported by standard ms guid
-		ptr->Pitch = static_cast<mfxU16>(lockedRect.RowPitch);
-		ptr->Y = static_cast<mfxU8 *>(lockedRect.pData);
-		ptr->V = static_cast<mfxU8 *>(
-			static_cast<mfxU8 *>(lockedRect.pData) +
-			desc.Height * lockedRect.RowPitch);
-		ptr->U = static_cast<mfxU8 *>(
-			ptr->V + (desc.Height * lockedRect.RowPitch) / 4);
-		break;
-	case DXGI_FORMAT_YUY2:
-		ptr->Pitch = static_cast<mfxU16>(lockedRect.RowPitch);
-		ptr->Y = static_cast<mfxU8 *>(lockedRect.pData);
-		ptr->U = ptr->Y + 1;
-		ptr->V = ptr->Y + 3;
-		break;
-	case DXGI_FORMAT_P8:
-		ptr->Pitch = static_cast<mfxU16>(lockedRect.RowPitch);
-		ptr->Y = static_cast<mfxU8 *>(lockedRect.pData);
-		ptr->U = 0;
-		ptr->V = 0;
-		break;
-	case DXGI_FORMAT_AYUV:
-	case DXGI_FORMAT_B8G8R8A8_UNORM:
-		ptr->Pitch = static_cast<mfxU16>(lockedRect.RowPitch);
-		ptr->B = static_cast<mfxU8 *>(lockedRect.pData);
-		ptr->G = ptr->B + 1;
-		ptr->R = ptr->B + 2;
-		ptr->A = ptr->B + 3;
-		break;
-	case DXGI_FORMAT_R10G10B10A2_UNORM:
-		ptr->Pitch = static_cast<mfxU16>(lockedRect.RowPitch);
-		ptr->B = static_cast<mfxU8 *>(lockedRect.pData);
-		ptr->G = ptr->B + 1;
-		ptr->R = ptr->B + 2;
-		ptr->A = ptr->B + 3;
-		break;
-	case DXGI_FORMAT_R16G16B16A16_UNORM:
-		ptr->V16 = static_cast<mfxU16 *>(lockedRect.pData);
-		ptr->U16 = ptr->V16 + 1;
-		ptr->Y16 = ptr->V16 + 2;
-		ptr->A = reinterpret_cast<mfxU8 *>(ptr->V16 + 3);
-		ptr->PitchHigh =
-			static_cast<mfxU16>(lockedRect.RowPitch / (1 << 16));
-		ptr->PitchLow =
-			static_cast<mfxU16>(lockedRect.RowPitch % (1 << 16));
-		break;
-	case DXGI_FORMAT_R16_UNORM:
-	case DXGI_FORMAT_R16_UINT:
-		ptr->Pitch = static_cast<mfxU16>(lockedRect.RowPitch);
-		ptr->Y16 = static_cast<mfxU16 *>(lockedRect.pData);
-		ptr->U16 = 0;
-		ptr->V16 = 0;
-		break;
+		case DXGI_FORMAT_P016:
+		case DXGI_FORMAT_NV12:
+			ptr->Pitch = static_cast<mfxU16>(lockedRect.RowPitch);
+			ptr->Y = static_cast<mfxU8 *>(lockedRect.pData);
+			ptr->U = static_cast<mfxU8 *>(
+					static_cast<mfxU8 *>(lockedRect.pData) +
+					desc.Height * lockedRect.RowPitch);
+			ptr->V = (desc.Format == DXGI_FORMAT_P010) ? ptr->U + 2
+													   : ptr->U + 1;
+			break;
+		case DXGI_FORMAT_420_OPAQUE: // can be unsupported by standard ms guid
+			ptr->Pitch = static_cast<mfxU16>(lockedRect.RowPitch);
+			ptr->Y = static_cast<mfxU8 *>(lockedRect.pData);
+			ptr->V = static_cast<mfxU8 *>(
+					static_cast<mfxU8 *>(lockedRect.pData) +
+					desc.Height * lockedRect.RowPitch);
+			ptr->U = static_cast<mfxU8 *>(
+					ptr->V + (desc.Height * lockedRect.RowPitch) / 4);
+			break;
+		case DXGI_FORMAT_YUY2:
+			ptr->Pitch = static_cast<mfxU16>(lockedRect.RowPitch);
+			ptr->Y = static_cast<mfxU8 *>(lockedRect.pData);
+			ptr->U = ptr->Y + 1;
+			ptr->V = ptr->Y + 3;
+			break;
+		case DXGI_FORMAT_P8:
+			ptr->Pitch = static_cast<mfxU16>(lockedRect.RowPitch);
+			ptr->Y = static_cast<mfxU8 *>(lockedRect.pData);
+			ptr->U = 0;
+			ptr->V = 0;
+			break;
+		case DXGI_FORMAT_AYUV:
+		case DXGI_FORMAT_B8G8R8A8_UNORM:
+			ptr->Pitch = static_cast<mfxU16>(lockedRect.RowPitch);
+			ptr->B = static_cast<mfxU8 *>(lockedRect.pData);
+			ptr->G = ptr->B + 1;
+			ptr->R = ptr->B + 2;
+			ptr->A = ptr->B + 3;
+			break;
+		case DXGI_FORMAT_R10G10B10A2_UNORM:
+			ptr->Pitch = static_cast<mfxU16>(lockedRect.RowPitch);
+			ptr->B = static_cast<mfxU8 *>(lockedRect.pData);
+			ptr->G = ptr->B + 1;
+			ptr->R = ptr->B + 2;
+			ptr->A = ptr->B + 3;
+			break;
+		case DXGI_FORMAT_R16G16B16A16_UNORM:
+			ptr->V16 = static_cast<mfxU16 *>(lockedRect.pData);
+			ptr->U16 = ptr->V16 + 1;
+			ptr->Y16 = ptr->V16 + 2;
+			ptr->A = reinterpret_cast<mfxU8 *>(ptr->V16 + 3);
+			ptr->PitchHigh =
+					static_cast<mfxU16>(lockedRect.RowPitch / (1 << 16));
+			ptr->PitchLow =
+					static_cast<mfxU16>(lockedRect.RowPitch % (1 << 16));
+			break;
+		case DXGI_FORMAT_R16_UNORM:
+		case DXGI_FORMAT_R16_UINT:
+			ptr->Pitch = static_cast<mfxU16>(lockedRect.RowPitch);
+			ptr->Y16 = static_cast<mfxU16 *>(lockedRect.pData);
+			ptr->U16 = 0;
+			ptr->V16 = 0;
+			break;
 #if (MFX_VERSION >= 1031)
-	case DXGI_FORMAT_Y416:
+			case DXGI_FORMAT_Y416:
 		ptr->PitchHigh =
 			static_cast<mfxU16>(lockedRect.RowPitch / (1 << 16));
 		ptr->PitchLow =
@@ -590,7 +590,7 @@ mfxStatus simple_lock(mfxHDL pthis, mfxMemId mid, mfxFrameData *ptr)
 	case DXGI_FORMAT_Y216:
 #endif
 #if (MFX_VERSION >= 1027)
-	case DXGI_FORMAT_Y210:
+			case DXGI_FORMAT_Y210:
 		ptr->PitchHigh =
 			static_cast<mfxU16>(lockedRect.RowPitch / (1 << 16));
 		ptr->PitchLow =
@@ -613,8 +613,8 @@ mfxStatus simple_lock(mfxHDL pthis, mfxMemId mid, mfxFrameData *ptr)
 
 		break;
 #endif
-	default:
-		return MFX_ERR_LOCK_MEMORY;
+		default:
+			return MFX_ERR_LOCK_MEMORY;
 	}
 
 	return MFX_ERR_NONE;
@@ -626,9 +626,9 @@ mfxStatus simple_unlock(mfxHDL pthis, mfxMemId mid, mfxFrameData *ptr)
 
 	CustomMemId *memId = static_cast<CustomMemId *>(mid);
 	ID3D11Texture2D *pSurface =
-		static_cast<ID3D11Texture2D *>(memId->memId);
+			static_cast<ID3D11Texture2D *>(memId->memId);
 	ID3D11Texture2D *pStage =
-		static_cast<ID3D11Texture2D *>(memId->memIdStage);
+			static_cast<ID3D11Texture2D *>(memId->memIdStage);
 
 	if (nullptr == pStage) {
 		g_pD3D11Ctx->Unmap(pSurface, 0);
@@ -637,7 +637,7 @@ mfxStatus simple_unlock(mfxHDL pthis, mfxMemId mid, mfxFrameData *ptr)
 		// copy data only in case of user wants to write to stored surface
 		if (memId->rw & WILL_WRITE)
 			g_pD3D11Ctx->CopySubresourceRegion(pSurface, 0, 0, 0, 0,
-							   pStage, 0, nullptr);
+											   pStage, 0, nullptr);
 	}
 
 	if (ptr) {
@@ -651,21 +651,21 @@ mfxStatus simple_unlock(mfxHDL pthis, mfxMemId mid, mfxFrameData *ptr)
 }
 
 mfxStatus simple_copytex(mfxHDL pthis, mfxMemId mid, mfxU32 tex_handle,
-			 mfxU64 lock_key, mfxU64 *next_key)
+						 mfxU64 lock_key, mfxU64 *next_key)
 {
 	pthis; // To suppress warning for this unused parameter
 
 	CustomMemId *memId = static_cast<CustomMemId *>(mid);
 	ID3D11Texture2D *pSurface =
-		static_cast<ID3D11Texture2D *>(memId->memId);
+			static_cast<ID3D11Texture2D *>(memId->memId);
 
 	IDXGIKeyedMutex *km = 0;
 	ID3D11Texture2D *input_tex = 0;
 	HRESULT hr;
 
 	hr = g_pD3D11Device->OpenSharedResource(
-		reinterpret_cast<HANDLE>(static_cast<uintptr_t>(tex_handle)),
-		IID_ID3D11Texture2D, (void **)&input_tex);
+			reinterpret_cast<HANDLE>(static_cast<uintptr_t>(tex_handle)),
+			IID_ID3D11Texture2D, (void **)&input_tex);
 	if (FAILED(hr)) {
 		return MFX_ERR_INVALID_HANDLE;
 	}
@@ -684,7 +684,7 @@ mfxStatus simple_copytex(mfxHDL pthis, mfxMemId mid, mfxU32 tex_handle,
 	input_tex->GetDesc(&desc);
 	D3D11_BOX SrcBox = {0, 0, 0, desc.Width, desc.Height, 1};
 	g_pD3D11Ctx->CopySubresourceRegion(pSurface, 0, 0, 0, 0, input_tex, 0,
-					   &SrcBox);
+									   &SrcBox);
 
 	km->ReleaseSync(*next_key);
 
@@ -719,11 +719,11 @@ mfxStatus _simple_free(mfxFrameAllocResponse *response)
 		for (mfxU32 i = 0; i < response->NumFrameActual; i++) {
 			if (response->mids[i]) {
 				mid = static_cast<CustomMemId *>(
-					response->mids[i]);
+						response->mids[i]);
 				pSurface = static_cast<ID3D11Texture2D *>(
-					mid->memId);
+						mid->memId);
 				pStage = static_cast<ID3D11Texture2D *>(
-					mid->memIdStage);
+						mid->memIdStage);
 
 				if (pSurface)
 					pSurface->Release();

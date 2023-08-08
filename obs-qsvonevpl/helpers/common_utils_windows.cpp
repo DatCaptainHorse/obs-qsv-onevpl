@@ -2,6 +2,12 @@
 
 #include "common_directx11.hpp"
 
+#include <util/windows/device-enum.h>
+#include <util/config-file.h>
+#include <util/platform.h>
+#include <util/pipe.h>
+#include <util/dstr.h>
+
 #include <intrin.h>
 #include <wrl/client.h>
 
@@ -33,7 +39,7 @@ double TimeDiffMsec(mfxTime tfinish, mfxTime tstart)
 
 	double freq = static_cast<double>(tFreq.QuadPart);
 	return static_cast<double>(1000.0 * (static_cast<double>(tfinish.QuadPart) - static_cast<double>(tstart.QuadPart)) /
-	       freq);
+							   freq);
 }
 
 static bool enum_luids(void *param, uint32_t idx, uint64_t luid)
@@ -51,6 +57,13 @@ void check_adapters(struct adapter_info *adapters, size_t *adapter_count)
 	dstr caps_str = {0};
 	os_process_pipe_t *pp_vpl = NULL;
 	config_t *config = NULL;
+
+	bool avc_supported = false;
+	bool av1_supported = false;
+	bool hevc_supported = false;
+	bool vp9_supported = false;
+
+	const char *error = NULL;
 
 	dstr_copy(&cmd, test_exe);
 	enum_graphics_device_luids(enum_luids, &cmd);
@@ -83,22 +96,18 @@ void check_adapters(struct adapter_info *adapters, size_t *adapter_count)
 		goto fail;
 	}
 
-	const char *error = config_get_string(config, "error", "string");
+	error = config_get_string(config, "error", "string");
 	if (error) {
 		blog(LOG_INFO, "Error querying QSV support: %s", error);
 		goto fail;
 	}
 
-	adapter_count = config_num_sections(config);
-	bool avc_supported = false;
-	bool av1_supported = false;
-	bool hevc_supported = false;
-	bool vp9_supported = false;
+	*adapter_count = config_num_sections(config);
 
-	if (adapter_count > MAX_ADAPTERS)
-		adapter_count = MAX_ADAPTERS;
+	if (*adapter_count > MAX_ADAPTERS)
+		*adapter_count = MAX_ADAPTERS;
 
-	for (size_t i = 0; i < adapter_count; ++i) {
+	for (size_t i = 0; i < *adapter_count; ++i) {
 		char section[16];
 		snprintf(section, sizeof(section), "%u", (int)i);
 
@@ -118,7 +127,7 @@ void check_adapters(struct adapter_info *adapters, size_t *adapter_count)
 				config_get_bool(config, section, "supports_vp9");
 	}
 
-fail:
+	fail:
 	config_close(config);
 	dstr_free(&caps_str);
 	dstr_free(&cmd);

@@ -6,7 +6,10 @@ project(obs-qsv-onevpl
 )
 
 # VPL
-set(BUILD_DISPATCHER_ONLY ON CACHE BOOL "" FORCE)
+# If Linux, disable tools, for some reason Windows requires them?
+if(UNIX)
+  set(BUILD_TOOLS OFF CACHE BOOL "" FORCE)
+endif()
 add_subdirectory(oneVPL)
 
 # VPL-private (experimental / hidden stuff)

@@ -2,6 +2,7 @@
 
 #include "common_utils.hpp"
 
+#define NOMINMAX
 #include <Windows.h>
 #include <d3d11.h>
 #include <dxgi1_6.h>
@@ -40,10 +41,10 @@ constexpr auto WILL_WRITE = 0x2000;
 // Intel Media SDK memory allocator entrypoints....
 // Implementation of this functions is OS/Memory type specific.
 mfxStatus simple_alloc(mfxHDL pthis, mfxFrameAllocRequest *request,
-		       mfxFrameAllocResponse *response);
+					   mfxFrameAllocResponse *response);
 mfxStatus simple_lock(mfxHDL pthis, mfxMemId mid, mfxFrameData *ptr);
 mfxStatus simple_unlock(mfxHDL pthis, mfxMemId mid, mfxFrameData *ptr);
 mfxStatus simple_gethdl(mfxHDL pthis, mfxMemId mid, mfxHDL *handle);
 mfxStatus simple_free(mfxHDL pthis, mfxFrameAllocResponse *response);
 mfxStatus simple_copytex(mfxHDL pthis, mfxMemId mid, mfxU32 tex_handle,
-			 mfxU64 lock_key, mfxU64 *next_key);
+						 mfxU64 lock_key, mfxU64 *next_key);
