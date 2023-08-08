@@ -19,8 +19,8 @@ or https://software.intel.com/en-us/media-client-solutions-support.
 #include <obs-module.h>
 #include "brc_routines.hpp"
 
-#include <math.h>
-#include <mfxdefs.h>
+#include <cmath>
+#include <vpl/mfxdefs.h>
 #include <algorithm>
 #include <memory>
 #include <vector>

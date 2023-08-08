@@ -13,8 +13,8 @@
 #include <cstring>
 #include <dirent.h>
 
-#include <mfxvideo++.h>
-#include <mfxdispatcher.h>
+#include <vpl/mfxvideo++.h>
+#include <vpl/mfxdispatcher.h>
 
 #define INTEL_VENDOR_ID 0x8086
 

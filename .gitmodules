@@ -1,6 +1,3 @@
 [submodule "oneVPL"]
 	path = oneVPL
 	url = https://github.com/oneapi-src/oneVPL.git
-[submodule "oneVPL-intel-gpu"]
-	path = oneVPL-intel-gpu
-	url = https://github.com/oneapi-src/oneVPL-intel-gpu.git

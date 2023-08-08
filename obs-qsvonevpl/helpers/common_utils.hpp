@@ -1,7 +1,7 @@
 #pragma once
-#include <stdio.h>
+#include <cstdio>
 
-#include <mfxvideo++.h>
+#include <vpl/mfxvideo++.h>
 
 
 // =================================================================

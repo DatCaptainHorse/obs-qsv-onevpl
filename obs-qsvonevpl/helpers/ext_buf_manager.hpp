@@ -12,19 +12,15 @@
 #include <utility>
 
 #ifndef __MFX_H__
-#include <mfx.h>
+#include <vpl/mfx.h>
 #endif
 
 #ifndef __MFXAV1_H__
-#include <mfxav1.h>
+#include <vpl/private/mfxav1.h>
 #endif
 
 #ifndef __MFXENCTOOLS_H__
-#include <mfxenctools.h>
-#endif
-
-#ifndef __MFX_EXT_BUFFERS_H__
-#include <mfx_ext_buffers.h>
+#include <vpl/private/mfxenctools.h>
 #endif
 
 constexpr uint16_t max_num_ext_buffers = 63 * 2;

@@ -2,7 +2,7 @@
 #include "helpers/common_utils.hpp"
 #include "helpers/ext_buf_manager.hpp"
 #ifndef __MFX_H__
-#include <mfx.h>
+#include <vpl/mfx.h>
 #endif
 
 #include <vector>

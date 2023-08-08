@@ -1,5 +1,5 @@
 #ifndef __MFX_H__
-#include <mfx.h>
+#include <vpl/mfx.h>
 #endif
 #include "obs-qsv-onevpl-encoder-internal.hpp"
 #include "helpers/brc_routines.hpp"

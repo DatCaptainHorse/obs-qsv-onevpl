@@ -9,8 +9,8 @@ project(obs-qsv-onevpl
 set(BUILD_DISPATCHER_ONLY ON CACHE BOOL "" FORCE)
 add_subdirectory(oneVPL)
 
-# VPL-GPU
-add_subdirectory(oneVPL-intel-gpu)
+# VPL-private (experimental / hidden stuff)
+add_subdirectory(oneVPL-private)
 
 # Actual plugin
 add_subdirectory(obs-qsvonevpl)

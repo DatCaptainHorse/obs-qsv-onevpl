@@ -85,7 +85,7 @@ elseif(UNIX AND NOT APPLE)
     helpers/common_utils_linux.cpp)
 
   find_package(VPL REQUIRED)
-	target_link_libraries(obs-qsvonevpl PRIVATE VPL::dispatcher onevpl-api mfx_common_hw va va-drm)
+	target_link_libraries(obs-qsvonevpl PRIVATE VPL::dispatcher oneVPL-private va va-drm)
 endif()
 
 get_target_property(target_sources obs-qsvonevpl SOURCES)
