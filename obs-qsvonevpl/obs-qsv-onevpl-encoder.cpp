@@ -100,7 +100,7 @@ qsv_t *qsv_encoder_open(qsv_param_t *pParams, enum qsv_codec codec)
 			}
 		}
 	}
-	blog(LOG_INFO, "Selected adapter: %d", adapter_idx);
+	blog(LOG_INFO, "Selected adapter: %lu", adapter_idx);
 	isDGPU = adapters[adapter_idx].is_dgpu;
 	mfxStatus sts;
 

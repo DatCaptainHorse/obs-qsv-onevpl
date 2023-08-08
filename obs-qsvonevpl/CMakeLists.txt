@@ -15,7 +15,9 @@ target_sources(
   obs-qsv-onevpl-encoder-internal.hpp
       helpers/common_utils.cpp
   helpers/common_utils.hpp
-  helpers/ext_buf_manager.hpp
+      helpers/ext_buf_manager.hpp
+      helpers/brc_routines.cpp
+      helpers/brc_routines.hpp
 )
 
 target_link_libraries(obs-qsvonevpl PRIVATE OBS::libobs)
@@ -29,7 +31,7 @@ target_compile_definitions(
   obs-qsvonevpl
   PRIVATE
   MFXVIDEO_CPP_ENABLE_MFXLOAD
-  $<$<BOOL:${UNIX}>:ONEVPL_EXPERIMENTAL> # Wouldn't compile otherwise
+  $<$<BOOL:${UNIX}>:ONEVPL_EXPERIMENTAL>
   $<$<BOOL:${ENABLE_HEVC}>:ENABLE_HEVC=1>
 )
 
@@ -68,8 +70,7 @@ target_sources(
     PRIVATE # cmake-format: sortable
             bits/windows_defs.h
             helpers/common_directx11.cpp
-  helpers/common_directx11.hpp
-            helpers/common_utils.cpp
+            helpers/common_directx11.hpp
             helpers/common_utils_windows.cpp)
 
 target_link_libraries(obs-qsvonevpl PRIVATE libvpl d3d11 dxgi dxguid OBS::COMutils)
@@ -83,7 +84,8 @@ elseif(UNIX AND NOT APPLE)
     bits/linux_defs.h
     helpers/common_utils_linux.cpp)
 
-	target_link_libraries(obs-qsvonevpl PRIVATE VPL va va-drm)
+  find_package(VPL REQUIRED)
+	target_link_libraries(obs-qsvonevpl PRIVATE VPL::dispatcher onevpl-api mfx_common_hw va va-drm)
 endif()
 
 get_target_property(target_sources obs-qsvonevpl SOURCES)

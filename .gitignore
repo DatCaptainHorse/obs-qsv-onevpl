@@ -7,3 +7,4 @@
 /.gitignore
 /cmake-build-relwithdebinfo/
 /oneVPL
+/oneVPL-intel-gpu

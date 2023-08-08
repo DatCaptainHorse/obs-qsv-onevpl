@@ -59,8 +59,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define NOMINMAX
 #include <Windows.h>
 #endif
-#include <vpl/mfxstructures.h>
-#include <vpl/mfxadapter.h>
+#include <mfxstructures.h>
+#include <mfxadapter.h>
 #include <cstdint>
 #include <cstddef>
 
