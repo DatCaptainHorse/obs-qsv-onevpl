@@ -21,10 +21,13 @@ target_sources(
   helpers/brc_routines.hpp
 )
 
-target_link_libraries(obs-qsvonevpl PRIVATE VPL::dispatcher oneVPL-private OBS::libobs)
+target_link_libraries(obs-qsvonevpl PRIVATE VPL oneVPL-private OBS::libobs)
 
 # cmake-format: off
-set_target_properties(obs-qsvonevpl PROPERTIES FOLDER plugins/obs-qsvonevpl PREFIX "")
+set_target_properties(obs-qsvonevpl PROPERTIES
+  FOLDER "plugins/obs-qsvonevpl"
+  PREFIX ""
+)
 # cmake-format: on
 
 # ONEVPL_EXPERIMENTAL
@@ -38,8 +41,6 @@ target_compile_definitions(
 
 # C++20 for C-like structs
 target_compile_features(obs-qsvonevpl PRIVATE cxx_std_20)
-
-set_target_properties(obs-qsvonevpl PROPERTIES FOLDER "plugins/obs-qsvonevpl")
 
 # Windows
 if(WIN32)

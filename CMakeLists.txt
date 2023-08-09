@@ -5,11 +5,18 @@ project(obs-qsv-onevpl
   LANGUAGES CXX
 )
 
-# VPL
-# If Linux, disable tools, for some reason Windows requires them?
-if(UNIX)
-  set(BUILD_TOOLS OFF CACHE BOOL "" FORCE)
+# If building as subdirectory..
+if(NOT PROJECT_IS_TOP_LEVEL)
+  # Remove warnings as errors, needed for in-OBS builds
+  if(UNIX)
+    add_compile_options(-Wno-error)
+  elseif(WIN32)
+    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_WARNING_AS_ERROR OFF)
+  endif()
 endif()
+
+# VPL
+set(BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 add_subdirectory(oneVPL)
 
 # VPL-private (experimental / hidden stuff)
