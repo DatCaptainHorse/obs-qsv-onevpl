@@ -7,8 +7,10 @@
 #if defined(_WIN32) || defined(_WIN64)
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
-#elif __linux__
+#elif defined(__linux__)
 #include <obs-nix-platform.h>
+#include <va/va_wayland.h>
+#include <va/va_x11.h>
 #endif
 
 #include <thread>

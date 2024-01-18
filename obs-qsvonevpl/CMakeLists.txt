@@ -21,7 +21,7 @@ target_sources(
   helpers/qsv_params.hpp
 )
 
-target_link_libraries(obs-qsvonevpl PRIVATE VPL libvpl-private OBS::libobs)
+target_link_libraries(obs-qsvonevpl PRIVATE vpl libvpl-private OBS::libobs)
 
 # cmake-format: off
 set_target_properties(obs-qsvonevpl PROPERTIES
@@ -93,5 +93,12 @@ elseif(UNIX AND NOT APPLE)
     bits/linux_defs.h
     helpers/common_utils_linux.cpp)
 
-  target_link_libraries(obs-qsvonevpl PRIVATE va va-drm va-wayland)
+  target_link_libraries(obs-qsvonevpl PRIVATE va va-drm va-wayland va-x11)
+
+  # pkg-config is used to find other libraries
+  find_package(PkgConfig REQUIRED)
+
+  # Find and link to wayland-client
+  pkg_check_modules(WAYLAND_CLIENT REQUIRED IMPORTED_TARGET wayland-client)
+  target_link_libraries(obs-qsvonevpl PRIVATE PkgConfig::WAYLAND_CLIENT)
 endif()

@@ -572,7 +572,7 @@ bool obs_qsv_encode_tex(void *data, uint32_t handle, int64_t pts,
                         struct encoder_packet *packet, bool *received_packet) {
   obs_qsv *obsqsv = static_cast<obs_qsv *>(data);
 
-  if (handle == GS_INVALID_HANDLE) {
+  if (handle == static_cast<uint32_t>(-1)) {
     blog(LOG_WARNING, "Encode failed: bad texture handle");
     *next_key = lock_key;
     return false;

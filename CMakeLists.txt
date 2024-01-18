@@ -15,10 +15,6 @@ if(NOT PROJECT_IS_TOP_LEVEL)
   endif()
 endif()
 
-# VPL
-set(BUILD_TOOLS OFF CACHE BOOL "" FORCE)
-add_subdirectory(libvpl)
-
 # VPL-private (experimental / hidden stuff)
 add_subdirectory(libvpl-private)
 

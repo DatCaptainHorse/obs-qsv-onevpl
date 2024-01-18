@@ -10,7 +10,7 @@ QSV_VPL_Encoder_Internal::QSV_VPL_Encoder_Internal(mfxVersion &version,
       mfx_Session(nullptr), mfx_EncodeSurface(nullptr), mfx_VideoENC(nullptr),
       VPS_Buffer(), SPS_Buffer(), PPS_Buffer(), VPS_BufferSize(128),
       SPS_BufferSize(512), PPS_BufferSize(128), mfx_Bitstream({}),
-      b_isDGPU(isDGPU), mfx_EncParams({}), mfx_ResetParams({}),
+      b_isDGPU(isDGPU), mfx_ResetParams({}),
       ResetParamChanged(false), mfx_SyncPoint(nullptr),
       mfx_BufferedSyncPoint(nullptr) {
   mfxIMPL tempImpl = MFX_IMPL_VIA_D3D11;
@@ -147,9 +147,9 @@ mfxStatus QSV_VPL_Encoder_Internal::Initialize(int deviceNum) {
 
   mfxHDL vaDisplay = nullptr;
   if (obs_get_nix_platform() == OBS_NIX_PLATFORM_X11_EGL) {
-    vaDisplay = vaGetDisplay((Display *)obs_get_nix_platform_display());
+    vaDisplay = vaGetDisplay(static_cast<Display*>(obs_get_nix_platform_display()));
   } else if (obs_get_nix_platform() == OBS_NIX_PLATFORM_WAYLAND) {
-    vaDisplay = vaGetDisplayWl((wl_display *)obs_get_nix_platform_display());
+    vaDisplay = vaGetDisplayWl(static_cast<wl_display*>(obs_get_nix_platform_display()));
   }
 #endif
 
@@ -312,7 +312,7 @@ mfxStatus QSV_VPL_Encoder_Internal::InitENCParams(struct qsv_param_t *pParams,
 
   mfx_EncParams.mfx.LowPower = GetCodingOpt(pParams->bLowpower);
   blog(LOG_INFO, "\tLowpower set: %s",
-       GetCodingOptStatus(mfx_EncParams.mfx.LowPower));
+       GetCodingOptStatus(mfx_EncParams.mfx.LowPower).c_str());
 
   mfx_EncParams.mfx.RateControlMethod =
       static_cast<mfxU16>(pParams->RateControl);
@@ -475,13 +475,13 @@ mfxStatus QSV_VPL_Encoder_Internal::InitENCParams(struct qsv_param_t *pParams,
     }
 
     CO->RateDistortionOpt = GetCodingOpt(pParams->bRDO);
-    blog(LOG_INFO, "\tRDO set: %s", GetCodingOptStatus(CO->RateDistortionOpt));
+    blog(LOG_INFO, "\tRDO set: %s", GetCodingOptStatus(CO->RateDistortionOpt).c_str());
 
     CO->VuiVclHrdParameters = GetCodingOpt(pParams->bHRDConformance);
     CO->VuiNalHrdParameters = GetCodingOpt(pParams->bHRDConformance);
     CO->NalHrdConformance = GetCodingOpt(pParams->bHRDConformance);
     blog(LOG_INFO, "\tHRDConformance set: %s",
-         GetCodingOptStatus(CO->NalHrdConformance));
+         GetCodingOptStatus(CO->NalHrdConformance).c_str());
   }
 
   if (mfx_Ext_CO2_enable == 1) {
@@ -499,7 +499,7 @@ mfxStatus QSV_VPL_Encoder_Internal::InitENCParams(struct qsv_param_t *pParams,
     }
 
     CO2->ExtBRC = GetCodingOpt(pParams->bExtBRC);
-    blog(LOG_INFO, "\tExtBRC set: %s", GetCodingOptStatus(CO2->ExtBRC));
+    blog(LOG_INFO, "\tExtBRC set: %s", GetCodingOptStatus(CO2->ExtBRC).c_str());
 
     if (pParams->bIntraRefEncoding == true) {
 
@@ -537,7 +537,7 @@ mfxStatus QSV_VPL_Encoder_Internal::InitENCParams(struct qsv_param_t *pParams,
 
     if (codec != QSV_CODEC_VP9) {
       CO2->MBBRC = GetCodingOpt(pParams->bMBBRC);
-      blog(LOG_INFO, "\tMBBRC set: %s", GetCodingOptStatus(CO2->MBBRC));
+      blog(LOG_INFO, "\tMBBRC set: %s", GetCodingOptStatus(CO2->MBBRC).c_str());
     }
 
     if (pParams->nGOPRefDist > 1) {
@@ -589,10 +589,10 @@ mfxStatus QSV_VPL_Encoder_Internal::InitENCParams(struct qsv_param_t *pParams,
     }
 
     CO2->AdaptiveI = GetCodingOpt(pParams->bAdaptiveI);
-    blog(LOG_INFO, "\tAdaptiveI set: %s", GetCodingOptStatus(CO2->AdaptiveI));
+    blog(LOG_INFO, "\tAdaptiveI set: %s", GetCodingOptStatus(CO2->AdaptiveI).c_str());
 
     CO2->AdaptiveB = GetCodingOpt(pParams->bAdaptiveB);
-    blog(LOG_INFO, "\tAdaptiveB set: %s", GetCodingOptStatus(CO2->AdaptiveB));
+    blog(LOG_INFO, "\tAdaptiveB set: %s", GetCodingOptStatus(CO2->AdaptiveB).c_str());
 
     if (pParams->RateControl == MFX_RATECONTROL_CBR ||
         pParams->RateControl == MFX_RATECONTROL_VBR) {
@@ -619,7 +619,7 @@ mfxStatus QSV_VPL_Encoder_Internal::InitENCParams(struct qsv_param_t *pParams,
     }
 
     CO2->UseRawRef = GetCodingOpt(pParams->bRawRef);
-    blog(LOG_INFO, "\tUseRawRef set: %s", GetCodingOptStatus(CO2->UseRawRef));
+    blog(LOG_INFO, "\tUseRawRef set: %s", GetCodingOptStatus(CO2->UseRawRef).c_str());
   }
 
   if (mfx_Ext_CO3_enable == 1) {
@@ -707,7 +707,7 @@ mfxStatus QSV_VPL_Encoder_Internal::InitENCParams(struct qsv_param_t *pParams,
 
     if (codec == QSV_CODEC_HEVC) {
       CO3->GPB = GetCodingOpt(pParams->bGPB);
-      blog(LOG_INFO, "\tGPB set: %s", GetCodingOptStatus(CO3->GPB));
+      blog(LOG_INFO, "\tGPB set: %s", GetCodingOptStatus(CO3->GPB).c_str());
     }
 
     if (pParams->bPPyramid == true) {
@@ -720,19 +720,19 @@ mfxStatus QSV_VPL_Encoder_Internal::InitENCParams(struct qsv_param_t *pParams,
 
     CO3->AdaptiveCQM = GetCodingOpt(pParams->bAdaptiveCQM);
     blog(LOG_INFO, "\tAdaptiveCQM set: %s",
-         GetCodingOptStatus(CO3->AdaptiveCQM));
+         GetCodingOptStatus(CO3->AdaptiveCQM).c_str());
 
     if (mfx_Version.Major >= 2 && mfx_Version.Minor >= 4) {
       CO3->AdaptiveRef = GetCodingOpt(pParams->bAdaptiveRef);
       blog(LOG_INFO, "\tAdaptiveRef set: %s",
-           GetCodingOptStatus(CO3->AdaptiveRef));
+           GetCodingOptStatus(CO3->AdaptiveRef).c_str());
 
       CO3->AdaptiveLTR = GetCodingOpt(pParams->bAdaptiveLTR);
       if (pParams->bExtBRC == true && codec == QSV_CODEC_AVC) {
         CO3->ExtBrcAdaptiveLTR = GetCodingOpt(pParams->bAdaptiveLTR);
       }
       blog(LOG_INFO, "\tAdaptiveLTR set: %s",
-           GetCodingOptStatus(CO3->AdaptiveLTR));
+           GetCodingOptStatus(CO3->AdaptiveLTR).c_str());
     }
 
     if (pParams->nWinBRCMaxAvgSize > 0) {
@@ -748,7 +748,7 @@ mfxStatus QSV_VPL_Encoder_Internal::InitENCParams(struct qsv_param_t *pParams,
     CO3->MotionVectorsOverPicBoundaries =
         GetCodingOpt(pParams->nMotionVectorsOverPicBoundaries);
     blog(LOG_INFO, "\tMotionVectorsOverPicBoundaries set: %s",
-         GetCodingOptStatus(CO3->MotionVectorsOverPicBoundaries));
+         GetCodingOptStatus(CO3->MotionVectorsOverPicBoundaries).c_str());
 
     if (pParams->bGlobalMotionBiasAdjustment.has_value() &&
         pParams->bGlobalMotionBiasAdjustment.value() == true) {
@@ -781,7 +781,7 @@ mfxStatus QSV_VPL_Encoder_Internal::InitENCParams(struct qsv_param_t *pParams,
 
     CO3->DirectBiasAdjustment = GetCodingOpt(pParams->bDirectBiasAdjustment);
     blog(LOG_INFO, "\tDirectBiasAdjustment set: %s",
-         GetCodingOptStatus(CO3->DirectBiasAdjustment));
+         GetCodingOptStatus(CO3->DirectBiasAdjustment).c_str());
   }
 
 #if defined(_WIN32) || defined(_WIN64)

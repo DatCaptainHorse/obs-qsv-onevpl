@@ -9,7 +9,7 @@
 #include <vpl/mfxcommon.h>
 #include <vpl/mfxdefs.h>
 #ifndef __QSV_VPL_ENCODER_H__
-#include "obs-qsv-onevpl-encoder.hpp"
+#include "../obs-qsv-onevpl-encoder.hpp"
 #endif
 
 
@@ -75,7 +75,7 @@ public:
 
   void Release() {
     if (mBitstream.Data) {
-      _aligned_free(mBitstream.Data);
+      free(mBitstream.Data);
       mBitstream.Data = nullptr;
     }
   }
@@ -90,7 +90,7 @@ public:
 
     if (nSize > 0) {
       if (nullptr == (mBitstream.Data =
-                          static_cast<mfxU8 *>(_aligned_malloc(nSize, 32)))) {
+                          static_cast<mfxU8 *>(aligned_alloc(32, nSize)))) {
         return MFX_ERR_MEMORY_ALLOC;
       }
 
@@ -156,7 +156,7 @@ public:
   }
 
   mfxStatus ChangeSize(mfxU32 nNewSize) {
-    mfxU8 *pData = static_cast<mfxU8 *>(_aligned_malloc(nNewSize, 32));
+    mfxU8 *pData = static_cast<mfxU8 *>(aligned_alloc(32, nNewSize));
     if (pData == nullptr) {
       return MFX_ERR_NULL_PTR;
     }

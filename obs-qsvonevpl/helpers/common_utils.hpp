@@ -3,8 +3,14 @@
 #define __QSV_VPL_COMMON_UTILS_H__
 #endif
 
+#if defined(_WIN32) || defined(_WIN64)
 #ifndef __INTRIN_H_
 #include <intrin.h>
+#endif
+#elif defined(__linux__)
+#ifndef __X86INTRIN_H
+#include <x86intrin.h>
+#endif
 #endif
 #ifndef _INC_STDIO
 #include <stdio.h>
@@ -86,3 +92,5 @@ struct adapter_info {
 #define MAX_ADAPTERS 10
 extern struct adapter_info adapters[MAX_ADAPTERS];
 extern size_t adapter_count;
+
+enum qsv_codec { QSV_CODEC_AVC, QSV_CODEC_AV1, QSV_CODEC_HEVC, QSV_CODEC_VP9 };

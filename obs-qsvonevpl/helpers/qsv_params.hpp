@@ -166,7 +166,7 @@ struct qsv_param_t {
   std::optional<int> nDenoiseMode;
   std::optional<int> nMVCostScalingFactor;
   std::optional<int> nLookAheadDS;
-  std::optional<int> nMotionVectorsOverPicBoundaries;
+  std::optional<bool> nMotionVectorsOverPicBoundaries;
   std::optional<int> nTuneQualityMode;
   std::optional<int> nNumRefFrameLayers;
   std::optional<int> nSAO;
